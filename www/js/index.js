@@ -18,6 +18,8 @@
  */
 var app = {
     // Application Constructor
+    state : 'OFF',
+    serverUrl: 'http://192.168.0.102/LED=',
     initialize: function() {
         this.bindEvents();
     },
@@ -26,8 +28,36 @@ var app = {
     // Bind any events that are required on startup. Common events are:
     // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
-        //document.addEventListener('deviceready', this.onDeviceReady, false);
+        alert('sadf');
+        ///once
+        //setTimeout(function(){ alert("Hello"); }, 5000);
+        //repeating execution after every delay microseconds
+        var cb = function(res){console.log(res);};
+        
+        //var i = 1;
+        //var timer = setInterval(function() { alert(i++) }, 2000);
+        //setInterval(this.httpGetAsync('http://192.168.0.102/LED=OFF', cb), 2000);
+        setInterval(this.httpGetAsync, 5000);
+        ///setTimeout(this.httpGetAsync, 5000);
+        //////setTimeout(this.httpGetAsync('http://192.168.0.102/LED=OFF', cb), 10000);
+        document.addEventListener('deviceready', this.onDeviceReady, false);
         document.addEventListener('controllerMain', this.onDeviceReady, false);
+    },
+
+    httpGetAsync: function(theUrl, callback){
+        this.state = this.state == 'ON'? 'OFF':'ON';
+        theUrl = 'http://192.168.0.102/LED=' + this.state;
+        console.log(theUrl);
+
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                //callback(xmlHttp.responseText);
+                //callback(xmlHttp);
+            }
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+        xmlHttp.send(null);
     },
     // deviceready Event Handler
     //
@@ -35,7 +65,8 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         ////app.receivedEvent('deviceready');
-        app.initButtonControlls()
+        alert('dev ready');
+        this.initButtonControlls();
     },
     
     initButtonControlls: function(){
